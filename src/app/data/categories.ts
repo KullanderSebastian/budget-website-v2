@@ -159,6 +159,6 @@ export const categories = {
         label: "Custom Categories",
         type: "custom",
         description: "User-defined categories.",
-        sources: {}, // Dynamically populated by user
+        sources: {},
     },
 };
