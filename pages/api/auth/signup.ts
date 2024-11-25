@@ -31,7 +31,7 @@ export default async function signup(req: NextApiRequest, res: NextApiResponse) 
         return res.status(405).end();
     }
 
-    const { email, password } = req.body;
+    const { name, email, password } = req.body;
 
     if (!email || !password) {
         return res.status(400).json({ message: "Email and password are required" });
@@ -49,6 +49,7 @@ export default async function signup(req: NextApiRequest, res: NextApiResponse) 
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new User({
+            name,
             email,
             password: hashedPassword
         });

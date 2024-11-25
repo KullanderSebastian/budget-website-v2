@@ -8,9 +8,19 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif']
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        customBlue: {
+          900: '#160361',
+          700: '#003a92',
+          500: '#0065b3',
+          300: '#008ec2',
+          100: '#00b7c4',
+        },
+        headerGray: "#1F2937",
+        textGray: "#4B5563", 
       },
     },
   },

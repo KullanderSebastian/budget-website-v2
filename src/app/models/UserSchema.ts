@@ -2,7 +2,7 @@ import mongoose, { Document, Model, Schema } from "mongoose";
 
 interface IUser extends Document {
     _id: mongoose.Types.ObjectId;
-    name?: string;
+    name: string;
     email: string;
     password?: string;
     image?: string;
@@ -17,9 +17,7 @@ interface IUser extends Document {
 const UserSchema: Schema<IUser> = new Schema({
     name: {
         type: String,
-        required: function(this: IUser) {
-            return !!this.googleId;
-        }
+        required: true
     },
     email: {
         type: String,
