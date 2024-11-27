@@ -5,9 +5,11 @@ export interface SignupState {
     email: string;
     password: string;
     confirmPassword: string;
+    generatedPassword: string;
     touchedFields: Partial<Record<"name" | "email" | "password" | "confirmPassword", boolean>>;
     formErrors: Partial<Record<"name" | "email" | "password" | "confirmPassword", string>>;
     error: string;
+    step: number;
 }
 
 const initialState: SignupState = {
@@ -15,18 +17,20 @@ const initialState: SignupState = {
     email: "",
     password: "",
     confirmPassword: "",
+    generatedPassword: "",
     touchedFields: {},
     formErrors: {},
     error: "",
+    step: 1,
 };
 
 const signupSlice = createSlice({
     name: "signup",
     initialState,
     reducers: {
-        setFieldValue: (state, action: PayloadAction<{ source: keyof SignupState; value: string }>) => {
-            const { source, value } = action.payload;
-            state[source] = value;
+        setFieldValue: (state, action: PayloadAction<{ field: keyof Omit<SignupState, "touchedFields" | "formErrors" | "error" | "step">; value: string }>) => {
+            const { field, value } = action.payload;
+            state[field] = value;
         },
         setTouchedField: (state, action: PayloadAction<keyof SignupState>) => {
             state.touchedFields[action.payload as keyof typeof state.touchedFields] = true;
@@ -42,6 +46,15 @@ const signupSlice = createSlice({
             state.error = action.payload;
         },
         resetForm: () => initialState,
+        nextStep: (state) => {
+            state.step += 1;
+        },
+        prevStep: (state) => {
+            state.step = Math.max(1, state.step - 1);
+        },
+        setStep: (state, action: PayloadAction<number>) => {
+            state.step = action.payload;
+        },
     },
 });
 
@@ -52,6 +65,9 @@ export const {
     clearFormError,
     setError,
     resetForm,
+    nextStep,
+    prevStep,
+    setStep,
 } = signupSlice.actions;
 
 export default signupSlice.reducer;

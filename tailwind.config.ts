@@ -9,16 +9,22 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'sans-serif']
+        sans: ['Lato', 'sans-serif']
+      },
+      backgroundImage: {
+        "auth-gradient": "linear-gradient(90deg, rgba(227,215,251,1) 0%, rgba(246,242,254,1) 32%)"
       },
       colors: {
-        customBlue: {
-          900: '#160361',
-          700: '#003a92',
-          500: '#0065b3',
-          300: '#008ec2',
-          100: '#00b7c4',
+        customPurple: {
+          1300: "#5D37E6",
+          1100: "#7B5CEB",
+          900: "#9880EF",
+          700: "#BBA4F5",
+          500: "#DBC9FC",
+          300: "#E3D7FB",
+          100: "#F6F2FE",
         },
+        errorRed: '#E63946',
         headerGray: "#1F2937",
         textGray: "#4B5563", 
       },
