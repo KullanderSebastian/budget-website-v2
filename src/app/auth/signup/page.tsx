@@ -158,7 +158,7 @@ export default function Signup() {
                         <>  
                             <div className="flex items-center space-x-4 mb-8">
                                 <p className="text-xs font-bold bg-customPurple-300 text-customPurple-1300 pl-2 pr-2 py-1 rounded">Step 1</p>
-                                <h1 className="text-2xl font-bold text-textGray">Create your account</h1>
+                                <h1 className="text-2xl font-bold text-headerGray">Create your account</h1>
                             </div>
                             <InputComponent
                                 label="Name"
