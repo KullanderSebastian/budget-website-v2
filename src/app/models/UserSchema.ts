@@ -10,6 +10,7 @@ interface IUser extends Document {
     emailVerified?: boolean;
     currency: string;
     accountBalance: number;
+    hasSetupBudget: boolean;
     created_at: Date;
     updated_at: Date;
 }
@@ -54,6 +55,11 @@ const UserSchema: Schema<IUser> = new Schema({
         type: Number,
         min: 0,
         required: false
+    },
+    hasSetupBudget: {
+        type: Boolean,
+        default: false,
+        required: false,
     }
 }, { timestamps: true });
 

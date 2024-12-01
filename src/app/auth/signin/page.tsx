@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { useSearchParams } from "next/navigation";
+import { getSession } from "next-auth/react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { signIn } from 'next-auth/react';
 import { RootState, AppDispatch } from "@/app/store/store";
@@ -22,6 +23,7 @@ export default function SignIn() {
     const { email, password, isSubmitting } = useSelector((state: RootState) => state.signin);
     const searchParams = useSearchParams();
     const error = searchParams?.get("error");
+    const router = useRouter();
 
     const getErrorMessage = (error: string | null) => {
         return errorMessages[error || "Default"] || errorMessages.Default;
@@ -32,13 +34,25 @@ export default function SignIn() {
 
         try {
             dispatch(setSubmitting(true));
+
             const result = await signIn("credentials", {
                 email,
                 password,
-                callbackUrl: "/dashboard",
+                redirect: false
             });
 
+            if (result?.ok) {
+                const session = await getSession();
+                const hasSetupBudget = (session?.user as { hasSetupBudget: boolean })?.hasSetupBudget;
 
+                if (hasSetupBudget) {
+                    router.push("/dashboard");
+                } else {
+                    router.push("/setup-budget");
+                }
+            } else {
+                console.error(result?.error || "Sign-in failed");
+            }
         } finally {
             dispatch(setSubmitting(false));
         }
@@ -57,13 +71,13 @@ export default function SignIn() {
                             label="Email"
                             value={email}
                             onChange={(e) => dispatch(setFieldValue({ field: "email", value: e.target.value }))}
-                            type=""
+                            type="email"
                         />
                         <InputComponent 
                             label="Password"
                             value={password}
                             onChange={(e) => dispatch(setFieldValue({ field: "password", value: e.target.value }))}
-                            type=""
+                            type="password"
                         />
                         <ButtonComponent 
                             type="submit"

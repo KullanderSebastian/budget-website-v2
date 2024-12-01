@@ -75,6 +75,7 @@ export const authOptions = {
                 (session.user as any).emailVerified = user.emailVerified;
                 (session.user as any).currency = user.currency;
                 (session.user as any).accountBalance = user.accountBalance;
+                (session.user as any).hasSetupBudget = user.hasSetupBudget;
             }
 
             session.userId = token.sub;
@@ -84,10 +85,13 @@ export const authOptions = {
             if (user) {
                 token.sub = user.id;
             }
+
             return token;
         },
         async redirect({ url, baseUrl }: { url: string; baseUrl: string }) {
-            return url.startsWith(baseUrl) ? `${baseUrl}/dashboard` : url;
+            if (!url.startsWith(baseUrl)) return url;
+
+            return `${baseUrl}/dashboard`;
         }
     },
     secret: process.env.NEXTAUTH_SECRET,
