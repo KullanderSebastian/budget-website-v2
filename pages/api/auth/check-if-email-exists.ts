@@ -1,7 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
+import connectToDatabase from "@/app/lib/mongodb";
 import User from "@/app/models/UserSchema";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    await connectToDatabase();
+
     if (req.method === "POST") {
         const { email } = req.body;
         const user = await User.findOne({ email });

@@ -11,7 +11,7 @@ import { SignUpSchema } from "@/app/validation/signUpSchema";
 import Link from "next/link";
 import { PiCopy } from "react-icons/pi";
 import * as yup from "yup";
-
+import TransparentHeader from "@/app/layout/TransparentHeader";
 
 export default function Signup() {
     const dispatch = useDispatch<AppDispatch>();
@@ -75,11 +75,15 @@ export default function Signup() {
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        try {
+        try {console.log("Validating form...");
             if (step === 2) {
                 await SignUpSchema.validate({ name, email }, { abortEarly: false });
             } else if (step === 3) {
-                await SignUpSchema.validate({ name, email, password, confirmPassword }, { abortEarly: false });
+                console.log("Current step:", step);
+                console.log("Inputs being validated:", { name, email, password, confirmPassword });
+                await SignUpSchema.validate({ name, email, password, confirmPassword }, { abortEarly: false, context: { step } });
+                console.log("Inputs being validated:", { name, email, password, confirmPassword });
+                console.log("Validation successful, proceeding to API call");
             }
 
             const payload = {
@@ -111,6 +115,10 @@ export default function Signup() {
                         dispatch(setFormError({ field: path, message: validationError.message }));
                     }
                 });
+
+                console.log("Validation failed, stopping further execution");
+
+                return;
             } else {
                 console.error("Unexpected signup error:", err);
             }
@@ -150,126 +158,129 @@ export default function Signup() {
     }, [step]);
 
     return (
-        <div className="flex items-center h-screen w-screen bg-auth-gradient">
-            <div className="w-1/3 bg-white rounded-2xl mx-auto shadow-xl shadow-customPurple-700 p-8">
-                {error && <p style={{ color: "red" }}>{error}</p>}
-                <form onSubmit={handleSignup}>
-                    {step === 1 && (
-                        <>  
-                            <div className="flex items-center space-x-4 mb-8">
-                                <p className="text-xs font-bold bg-customPurple-300 text-customPurple-1300 pl-2 pr-2 py-1 rounded">Step 1</p>
-                                <h1 className="text-2xl font-bold text-headerGray">Create your account</h1>
-                            </div>
-                            <InputComponent
-                                label="Name"
-                                value={name}
-                                onChange={(e) => dispatch(setFieldValue({ field: "name", value: e.target.value }))}
-                                onBlur={(e) => handleBlur("name", e.target.value)}
-                                error={formErrors.name}
-                            />
-                            <InputComponent
-                                label="Email"
-                                value={email}
-                                onChange={(e) => dispatch(setFieldValue({ field: "email", value: e.target.value }))}
-                                onBlur={(e) => handleBlur("email", e.target.value)}
-                                type="email"
-                                error={formErrors.email}
-                            />
-                        </>
-                    )}
-
-                    {step === 2 && (
-                        <>
-                            <div className="flex items-center space-x-4 mb-8">
-                                <p className="text-xs font-bold bg-customPurple-300 text-customPurple-1300 pl-2 pr-2 py-1 rounded">Step 2</p>
-                                <h1 className="text-2xl font-bold text-textGray">Set your password</h1>
-                            </div>
-                            <div className="flex items-center space-x-4 mb-8">
-                                <p className="text-xs font-bold bg-customPurple-300 text-customPurple-1300 py-1 px-2 rounded">{email.charAt(0).toUpperCase()}</p>
-                                <p className="text-textGray">{email}</p>
-                            </div>
-
-                            <div className="flex items-center justify-between bg-customPurple-300 p-2 rounded">
-                                <p className="">{generatedPassword}</p>
-                                <div onClick={copyToClipboard} className="text-2xl cursor-pointer p-1 rounded hover:bg-customPurple-700">
-                                    <PiCopy />
+        <>
+            <TransparentHeader />
+            <div className="flex items-center h-screen w-screen bg-auth-gradient">
+                <div className="w-1/3 bg-white rounded-2xl mx-auto shadow-xl shadow-customPurple-700 p-8">
+                    {error && <p style={{ color: "red" }}>{error}</p>}
+                    <form onSubmit={handleSignup}>
+                        {step === 1 && (
+                            <>  
+                                <div className="flex items-center space-x-4 mb-8">
+                                    <p className="text-xs font-bold bg-customPurple-300 text-customPurple-1300 pl-2 pr-2 py-1 rounded">Step 1</p>
+                                    <h1 className="text-2xl font-bold text-headerGray">Create your account</h1>
                                 </div>
-                            </div>
-                            <p className="text-xs text-textGray">We generated a strong password for you</p>
-
-                            
-
-                        </>
-                    )}
-
-                    {step === 3 && (
-                        <>
-                            <div className="flex items-center space-x-4 mb-8">
-                                <p className="text-xs font-bold bg-customPurple-300 text-customPurple-1300 pl-2 pr-2 py-1 rounded">Step 2</p>
-                                <h1 className="text-2xl font-bold text-textGray">Set your password</h1>
-                            </div>
-                            <InputComponent
-                                label="Password"
-                                value={password}
-                                onChange={(e) => dispatch(setFieldValue({ field: "password", value: e.target.value }))}
-                                onBlur={(e) => handleBlur("password", e.target.value)}
-                                type="password"
-                                error={formErrors.password}
-                            />
-                            <InputComponent
-                                label="Confirm Password"
-                                value={confirmPassword}
-                                onChange={(e) => dispatch(setFieldValue({ field: "confirmPassword", value: e.target.value }))}
-                                onBlur={(e) => handleBlur("confirmPassword", e.target.value)}
-                                type="password"
-                                error={formErrors.confirmPassword}
-                            />
-                        </>
-                    )}
-
-                    {step === 2 && (
-                        <>
-                            <div className="mt-8">
-                                <ButtonComponent 
-                                    type="submit"
-                                    title="Proceed with this password"
+                                <InputComponent
+                                    label="Name"
+                                    value={name}
+                                    onChange={(e) => dispatch(setFieldValue({ field: "name", value: e.target.value }))}
+                                    onBlur={(e) => handleBlur("name", e.target.value)}
+                                    error={formErrors.name}
                                 />
-                            </div>
+                                <InputComponent
+                                    label="Email"
+                                    value={email}
+                                    onChange={(e) => dispatch(setFieldValue({ field: "email", value: e.target.value }))}
+                                    onBlur={(e) => handleBlur("email", e.target.value)}
+                                    type="email"
+                                    error={formErrors.email}
+                                />
+                            </>
+                        )}
 
-                            <div onClick={handleNext} className="w-full p-2 rounded-lg font-bold cursor-pointer text-center hover:bg-customPurple-100 mt-4">
-                                <p className="text-customPurple-1300">Choose my own password</p>
-                            </div>
-                        </>
-                    )}
+                        {step === 2 && (
+                            <>
+                                <div className="flex items-center space-x-4 mb-8">
+                                    <p className="text-xs font-bold bg-customPurple-300 text-customPurple-1300 pl-2 pr-2 py-1 rounded">Step 2</p>
+                                    <h1 className="text-2xl font-bold text-textGray">Set your password</h1>
+                                </div>
+                                <div className="flex items-center space-x-4 mb-8">
+                                    <p className="text-xs font-bold bg-customPurple-300 text-customPurple-1300 py-1 px-2 rounded">{email.charAt(0).toUpperCase()}</p>
+                                    <p className="text-textGray">{email}</p>
+                                </div>
+
+                                <div className="flex items-center justify-between bg-customPurple-300 p-2 rounded">
+                                    <p className="">{generatedPassword}</p>
+                                    <div onClick={copyToClipboard} className="text-2xl cursor-pointer p-1 rounded hover:bg-customPurple-700">
+                                        <PiCopy />
+                                    </div>
+                                </div>
+                                <p className="text-xs text-textGray">We generated a strong password for you</p>
+
+                                
+
+                            </>
+                        )}
+
+                        {step === 3 && (
+                            <>
+                                <div className="flex items-center space-x-4 mb-8">
+                                    <p className="text-xs font-bold bg-customPurple-300 text-customPurple-1300 pl-2 pr-2 py-1 rounded">Step 2</p>
+                                    <h1 className="text-2xl font-bold text-textGray">Set your password</h1>
+                                </div>
+                                <InputComponent
+                                    label="Password"
+                                    value={password}
+                                    onChange={(e) => dispatch(setFieldValue({ field: "password", value: e.target.value }))}
+                                    onBlur={(e) => handleBlur("password", e.target.value)}
+                                    type="password"
+                                    error={formErrors.password}
+                                />
+                                <InputComponent
+                                    label="Confirm Password"
+                                    value={confirmPassword}
+                                    onChange={(e) => dispatch(setFieldValue({ field: "confirmPassword", value: e.target.value }))}
+                                    onBlur={(e) => handleBlur("confirmPassword", e.target.value)}
+                                    type="password"
+                                    error={formErrors.confirmPassword}
+                                />
+                            </>
+                        )}
+
+                        {step === 2 && (
+                            <>
+                                <div className="mt-8">
+                                    <ButtonComponent 
+                                        type="submit"
+                                        title="Proceed with this password"
+                                    />
+                                </div>
+
+                                <div onClick={handleNext} className="w-full p-2 rounded-lg font-bold cursor-pointer text-center hover:bg-customPurple-100 mt-4">
+                                    <p className="text-customPurple-1300">Choose my own password</p>
+                                </div>
+                            </>
+                        )}
 
 
-                    {step < 2 && (
-                        <>
-                            <ButtonComponent 
-                                type="button"
-                                title="Start using Budget Planner"
-                                onClick={handleNext}
-                            />
-                            <p className="mt-2">Already have an account? <Link href="/auth/signin" className="text-customPurple-1300 underline hover:no-underline">Sign in</Link></p>
-                        </>
-                    )}
+                        {step < 2 && (
+                            <>
+                                <ButtonComponent 
+                                    type="button"
+                                    title="Start using Budget Planner"
+                                    onClick={handleNext}
+                                />
+                                <p className="mt-2">Already have an account? <Link href="/auth/signin" className="text-customPurple-1300 underline hover:no-underline">Sign in</Link></p>
+                            </>
+                        )}
 
-                    {step === 3 && (
-                        <>
-                            <ButtonComponent
-                                type="submit"
-                                title="Submit"
-                            />
+                        {step === 3 && (
+                            <>
+                                <ButtonComponent
+                                    type="submit"
+                                    title="Submit"
+                                />
 
-                            <div className="mt-4"></div>
+                                <div className="mt-4"></div>
 
-                            <div onClick={handlePrev} className="w-full p-2 rounded-lg font-bold cursor-pointer text-center hover:bg-customPurple-100 mt-4">
-                                <p className="text-customPurple-1300">Go back</p>
-                            </div>
-                        </>
-                    )}
-                </form>
+                                <div onClick={handlePrev} className="w-full p-2 rounded-lg font-bold cursor-pointer text-center hover:bg-customPurple-100 mt-4">
+                                    <p className="text-customPurple-1300">Go back</p>
+                                </div>
+                            </>
+                        )}
+                    </form>
+                </div>
             </div>
-        </div>
+        </>
     );
 }
