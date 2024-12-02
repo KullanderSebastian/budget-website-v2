@@ -16,18 +16,11 @@ export const categories = {
     fixedExpenses: {
         label: "Fixed Expenses",
         type: "expense",
-        priority: "high",
         description: "Regular, predictable expenses.",
         sources: {
-            housing: {
-                label: "Housing",
-                subcategories: {
-                    rent: "Rent",
-                    mortgage: "Mortgage",
-                    propertyTax: "Property Tax",
-                },
-                recurring: true,
-            },
+            rent: { label: "Rent", recurring: true },
+            mortgage: { label: "Mortgage", recurring: true },
+            propertyTax: { label: "Property Tax", recurring: true },
             utilities: { label: "Utilities (Electricity, Water, Gas)", recurring: true },
             internet: { label: "Internet/Broadband", recurring: true },
             phone: { label: "Phone Bills", recurring: true },
@@ -39,7 +32,6 @@ export const categories = {
     variableExpenses: {
         label: "Variable Expenses",
         type: "expense",
-        priority: "medium",
         description: "Expenses that vary month-to-month.",
         sources: {
             groceries: { label: "Groceries", recurring: true },
@@ -51,9 +43,8 @@ export const categories = {
         },
     },
     savings: {
-        label: "Savings & Investments",
+        label: "Savings",
         type: "saving",
-        priority: "high",
         description: "Money set aside for the future.",
         sources: {
             emergency: { label: "Emergency Fund", recurring: true },
@@ -66,7 +57,6 @@ export const categories = {
     debt: {
         label: "Debt & Loans",
         type: "debt",
-        priority: "high",
         description: "Money owed or repayments.",
         sources: {
             creditCard: { label: "Credit Card Payments", recurring: true },
@@ -80,7 +70,6 @@ export const categories = {
     discretionary: {
         label: "Discretionary Spending",
         type: "expense",
-        priority: "low",
         description: "Optional spending for leisure or hobbies.",
         sources: {
             entertainment: { label: "Entertainment (Movies, Music, Games)", recurring: false },
@@ -93,7 +82,6 @@ export const categories = {
     education: {
         label: "Education",
         type: "expense",
-        priority: "medium",
         description: "Costs related to education or training.",
         sources: {
             tuition: { label: "Tuition Fees", recurring: false },
@@ -105,7 +93,6 @@ export const categories = {
     healthcare: {
         label: "Healthcare",
         type: "expense",
-        priority: "high",
         description: "Medical and healthcare-related expenses.",
         sources: {
             healthInsurance: { label: "Health Insurance", recurring: true },
@@ -120,7 +107,6 @@ export const categories = {
     business: {
         label: "Business Expenses",
         type: "expense",
-        priority: "medium",
         description: "Expenses related to running a business or freelancing.",
         sources: {
             officeSupplies: { label: "Office Supplies", recurring: false },
@@ -134,7 +120,6 @@ export const categories = {
     pets: {
         label: "Pet Expenses",
         type: "expense",
-        priority: "low",
         description: "Costs related to caring for pets.",
         sources: {
             food: { label: "Pet Food", recurring: true },
@@ -147,7 +132,6 @@ export const categories = {
     emergencies: {
         label: "Emergencies",
         type: "expense",
-        priority: "high",
         description: "Unexpected expenses or emergencies.",
         sources: {
             medicalBills: { label: "Unexpected Medical Bills", recurring: false },
@@ -159,6 +143,8 @@ export const categories = {
         label: "Custom Categories",
         type: "custom",
         description: "User-defined categories.",
-        sources: {},
+        sources: {
+            example: { label: "Example Custom Category", recurring: false }
+        }
     },
 };

@@ -3,18 +3,18 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface BudgetState {
-    [category: string]: {
-        [source: string]: number | { [subcategory: string]: number };
-    };
+
 }
 
-const initialState: BudgetState = {};
+const initialState: BudgetState = {
+
+};
 
 const budgetSlice = createSlice({
     name: "budget",
     initialState,
     reducers: {
-
+        
     },
 });
 

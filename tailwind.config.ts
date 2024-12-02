@@ -24,6 +24,9 @@ export default {
           300: "#E3D7FB",
           100: "#F6F2FE",
         },
+        complementary: {
+          DEFAULT: "#C0E637"
+        },
         errorRed: '#E63946',
         headerGray: "#1F2937",
         textGray: "#4B5563", 

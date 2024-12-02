@@ -1,24 +1,24 @@
 "use client";
 
 import { configureStore } from "@reduxjs/toolkit";
-import budgetReducer, { BudgetState } from "./budgetSlice";
 import signupReducer, { SignupState } from "./SignupSlice";
 import signinReducer, { SigninState } from "./SigninSlice";
-import dashboardReducer, { DashboardState} from "./dashboardSlice";
+import dashboardReducer, { DashboardState } from "./dashboardSlice";
+import budgetStateReducer, { BudgetState } from "./BudgetStateSlice";
 
 export interface RootState {
     signup: SignupState;
     signin: SigninState;
-    budget: BudgetState;
     dashboard: DashboardState;
+    budgetState: BudgetState
 }
 
 export const store = configureStore({
     reducer: {
-        budget: budgetReducer,
         signup: signupReducer,
         signin: signinReducer,
         dashboard: dashboardReducer,
+        budgetState: budgetStateReducer,
     },
 });
 
