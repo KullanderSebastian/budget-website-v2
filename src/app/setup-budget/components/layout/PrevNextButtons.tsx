@@ -1,7 +1,10 @@
 import React from "react";
 
-export default function PrevNextButtons() {
+export default function PrevNextButtons({ onPrev, onNext }: { onPrev: () => void, onNext: () => void }) {
     return (
-        <h1>prevnext</h1>
+        <div>
+            <button onClick={onPrev} type="button">Prev</button>
+            <button onClick={onNext} type="button">Next</button>
+        </div>
     );
 }
