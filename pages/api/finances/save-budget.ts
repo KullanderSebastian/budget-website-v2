@@ -4,6 +4,15 @@ import connectToDatabase from "@/app/lib/mongodb";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]";
 
+const normalizeFinances = (finances: Record<string, Record<string, any>>) => {
+    return new Map(
+        Object.entries(finances).map(([category, sources]) => [
+            category,
+            new Map(Object.entries(sources))
+        ])
+    );
+};
+
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     if (req.method === "POST") {
         const { finances } = req.body;
@@ -22,14 +31,16 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         try {
             await connectToDatabase();
 
+            const normalizedFinances = normalizeFinances(finances);
+
             const existingBudget = await Budget.findOne({ user_id: userId });
 
             if (existingBudget) {
-                existingBudget.finances = finances;
+                existingBudget.finances = normalizedFinances;
                 await existingBudget.save();
                 return res.status(200).json({ message: "Budget updated successfully." });
             } else {
-                const newBudget = new Budget({ user_id: userId, finances });
+                const newBudget = new Budget({ user_id: userId, normalizedFinances });
                 await newBudget.save();
                 return res.status(201).json({ message: "Budget created successfully" });
             }
