@@ -1,10 +1,9 @@
-import InputComponent from "@/app/components/InputComponent";
+import InputBudgetComponent from "@/app/components/InputBudgetComponent";
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "@/app/store/store";
 import { setSourceValue } from "@/app/store/FinancesSlice";
 import { categories } from "@/app/data/categories";
-import { CiCircleQuestion } from "react-icons/ci";
 import PrevNextButtons from "./layout/PrevNextButtons";
 
 
@@ -30,14 +29,13 @@ export default function BudgetFormHandler({ onPrev, onNext }: { onPrev: () => vo
 
     return (
         <div>
-            <h1>{category["label"]}</h1>
-            <p>{category["description"]}</p>
+            <h1 className="text-2xl font-bold text-headerGray mb-2">{category["label"]}</h1>
+            <p className="text-sm text-textGray mb-4">{category["description"]}</p>
             {Object.entries(category.sources).map(([sourceKey, source]: [string, SourceObject]) => {
                 if (source.recurring) {
                     return (
                         <div key={sourceKey} className="mb-4">
-                            <CiCircleQuestion className="inline-block mr-2" />
-                            <InputComponent
+                            <InputBudgetComponent
                                 label={source.label}
                                 value={
                                     financesState[categoryKey]?.[sourceKey] !== undefined &&
